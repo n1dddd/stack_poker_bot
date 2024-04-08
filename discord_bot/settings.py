@@ -25,7 +25,7 @@ LOGGING_CONFIG = {
         },
         "standard": {
             "format": "%(levelname)-10s - %(name)-15s : %(message)s"
-        }
+        },
     },
     "handlers":{
         "console": {
@@ -41,7 +41,7 @@ LOGGING_CONFIG = {
         "file": {
             'level': "INFO",
             'class': "logging.FileHandler",
-            'filename': "discord_bot/logs/infos.log",
+            'filename': "logs/infos.log",
             'mode': "w",
             'formatter': "verbose"
         },
@@ -56,8 +56,8 @@ LOGGING_CONFIG = {
             'handlers': ['console2', "file"],
             "level" : "INFO",
             "propagate": False
-        }
-    }
+        },
+    },
 }
 
 dictConfig(LOGGING_CONFIG)

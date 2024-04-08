@@ -1,0 +1,99 @@
+from flask import Flask, request, jsonify, make_response
+from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+from os import environ
+
+app = Flask(__name__)
+CORS(app)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('DATABASE_URL')
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    bankroll = db.Column(db.Integer, nullable=False, default=0)
+
+    def json(self):
+        return{'id': self.id, 'username': self.username, 'bankroll': self.bankroll}
+
+class Tournament(db.Model):
+    __tablename__ = 'tournaments'
+    id = db.Column(db.Integer, primary_key=True)
+    stake = db.Column(db.Integer, nullable=False, default=0)
+    payout = db.Column(db.Integer, nullable=False, default=0)
+    first = db.Column(db.String(80), default="")
+    second = db.Column(db.String(80), default="")
+    third = db.Column(db.String(80), default="")
+
+    def json(self):
+        return{'id': self.id, 'stake': self.stake, 'payout': self.payout, 'first': self.first, 'second': self.second, 'third': self.third}
+
+class Participant(db.Model):
+    __tablename__ = "participants"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    tournament_id = db.column(db.Integer, db.ForeignKey('tournaments.id'))
+
+    def json(self):
+        return{'id': self.id, 'user_id': self.id, 'tournament_id': self.tournament_id}
+
+with app.app_context():
+    db.create_all()
+
+@app.route('/test', methods=['GET'])
+def test():
+    return jsonify({'message': 'the server is running'})
+    
+@app.route('/api/flask/users', methods=['GET'])
+def get_users():
+    try:
+        users = User.query.all()
+        users_data = [{'id': user.id, 'username': user.username, 'bankroll': user.bankroll} for user in users]
+        return jsonify(users_data), 200
+    except Exception as e:
+        return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
+    
+# app.route('/api/flask/users/<id>', methods=['GET'])
+# def get_user(id):
+#     try:
+#         user = User.query.filter_by(id=id).first()
+#         if user:
+#             return make_response(jsonify({'user': user.json()}), 200)
+#         return make_response(jsonify({'message':'user not found'}), 404)
+#     except Exception as e:
+#         return make_response(jsonify({'message':'error getting user', 'error': str(e)}), 500)
+
+# @app.route('/api/flask/users', methods=['POST'])
+# def create_user():
+#     try:
+#         data = request.get_json()
+#         new_user = User(username=data['username'])
+#         db.session.add(new_user)
+#         db.session.commit()
+
+#         return jsonify({
+#             'id': new_user.id,
+#             'username': new_user.username,
+#             'bankroll': new_user.bankroll
+#         }), 201
+    
+#     except Exception as e:
+#         return make_response(jsonify({'message':'error creating user', 'error': str(e)}), 500)
+
+
+# app.route('/api/flask/users/<id>', methods=['PUT'])
+# def update_user_bankroll(id, operation, value):
+#     try:
+#         user = User.query.filter_by(id=id).first()
+#         if user:
+#             data = request.get_json()
+#             if operation == "add":
+#                 user.bankroll = user.bankroll + value
+#             elif operation == "subtract":
+#                 user.bankroll = user.bankroll - value
+#             return make_response(jsonify({'message':'user updated'}), 200)
+#         return make_response(jsonify({'message':'user not found', 'error': str(e)}), 404)
+#     except Exception as e:
+#         return make_response(jsonify({'message':'error getting user', 'error': str(e)}), 500)

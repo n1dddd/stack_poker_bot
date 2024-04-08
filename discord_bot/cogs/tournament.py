@@ -54,6 +54,24 @@ class Tournaments(commands.Cog):
         embed.add_field(name="Allowed Rebuys", value=rebuys, inline=False)
 
         await context.send(embed=embed)
+    
+    @tournament.command(
+            name="end",
+            description="End a poker tournament....example /tournament end 1stplacename 2ndplacename 3rdplacename split"
+    )
+    @app_commands.guilds(discord.Object(id=guild))
+    async def end(self, context: Context, first : str, second : str, third : str, deal : bool):
+
+        embed = discord.Embed(
+            colour=discord.Color.dark_gold(),
+            title="♥️♣️Boink Gang North American Poker Tour♠️♦️",
+        )
+        embed.add_field(name="Deal Made?", value=deal, inline=False)
+        embed.add_field(name="🥇First Place", value=first, inline=False)
+        embed.add_field(name="🥈Second Place", value=second, inline=False)
+        embed.add_field(name="🥉Third Place", value=third, inline=False)
+
+        await context.send(embed=embed)
 
 async def setup(bot) -> None:
     await bot.add_cog(Tournaments(bot))

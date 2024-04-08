@@ -33,11 +33,10 @@ MANIFEST
 *.manifest
 *.spec
 
-backend
+database
 
 logs
 
-compose.yml
 
 # Installer logs
 pip-log.txt

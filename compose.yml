@@ -1,5 +1,4 @@
 services:
-
   db:
     container_name: db
     image: postgres:13
@@ -7,7 +6,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    
     ports:
       - 5432:5432
     volumes:
@@ -34,7 +32,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+     - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
     volumes:
       - ./discord_bot:/app/discord_bot
     command: python3 main.py

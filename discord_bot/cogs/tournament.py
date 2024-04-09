@@ -4,6 +4,7 @@ from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 guild = settings.MY_GUILD
 
@@ -36,7 +37,7 @@ class Tournaments(commands.Cog):
     )
     @app_commands.guilds(discord.Object(id=guild))
     async def start(self, context: Context, stake : int, add_minutes : int, late_reg_minutes : int, rebuys: int):
-        start_time = datetime.now() + timedelta(minutes=add_minutes)
+        start_time = datetime.now(ZoneInfo("Canada/Eastern")) + timedelta(minutes=add_minutes)
 
         formatted_start_time = '{:%I:%M %p}'.format(start_time)
 

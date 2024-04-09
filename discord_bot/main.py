@@ -1,9 +1,12 @@
 import settings
 import os
 import discord
+import asyncpg
+from asyncpg.pool import create_pool
 from discord import app_commands
 from discord.ext.commands import Context
 from discord.ext import commands
+from os import environ
 
 logger = settings.logging.getLogger("bot")
 guild = settings.MY_GUILD
@@ -19,6 +22,10 @@ class DiscordBot(commands.Bot):
         )
         self.logger = logger
 
+    async def create_db_pool(self):
+        self.pg_con = await asyncpg.create_pool(dsn=environ.get("DATABASE_URL"))
+        self.logger.info("db connections successful")
+
     async def load_cogs(self) -> None:
         for file in os.listdir(f"{os.path.realpath(os.path.dirname(__file__))}/cogs"):
             if file.endswith(".py"):
@@ -31,15 +38,17 @@ class DiscordBot(commands.Bot):
                     self.logger.error(
                         f"Failed to load extension {extension}\n{exception}"
                     )
+
     async def setup_hook(self) -> None:
         self.logger.info(f"Logged in as {self.user.name}")
         await self.load_cogs()
+        await self.create_db_pool()
+        await self.pg_con.execute(
+            'INSERT INTO users(username, bankroll) VALUES ($1, $2)',
+            "n1d", 100
+        )
+
     
-    
-    async def sync(self, context: Context):
-        self.tree.copy_global_to(guild=guild)
-        await self.tree.sync()
-        await context.send("Updated!")
 
     async def on_command_error(self, context: Context, error) -> None:
         if isinstance(error, commands.MissingRequiredArgument):

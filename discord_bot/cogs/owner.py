@@ -12,7 +12,7 @@ class Owner(commands.Cog, name="owner"):
         name="sync",
         description="Synchronizes the slash commands.",
     )
-    @app_commands.describe(scope="The scope of sync. Can be `global`")
+    @app_commands.describe(scope="The scope of sync. Can be `global` or `guild`")
     @commands.is_owner()
     async def sync(self, context: Context, scope: str) -> None:
         if scope == "global":

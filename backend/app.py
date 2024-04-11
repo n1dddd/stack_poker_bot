@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -12,7 +13,7 @@ db = SQLAlchemy(app)
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    username = db.Column(db.String(80), nullable=False, unique=True)
     bankroll = db.Column(db.Integer, nullable=False, default=0)
 
     def json(self):
@@ -22,10 +23,11 @@ class Tournament(db.Model):
     __tablename__ = 'tournaments'
     id = db.Column(db.Integer, primary_key=True)
     stake = db.Column(db.Integer, nullable=False, default=0)
-    payout = db.Column(db.Integer, nullable=False, default=0)
-    first = db.Column(db.String(80), default="")
-    second = db.Column(db.String(80), default="")
-    third = db.Column(db.String(80), default="")
+    payout = db.Column(db.Integer, nullable=True, default=0)
+    first = db.Column(db.String(80), nullable=True, default="")
+    second = db.Column(db.String(80), nullable= True, default="")
+    third = db.Column(db.String(80), nullable=True, default="")
+    ongoing = db.Column(db.Boolean, nullable=False, default="True")
 
     def json(self):
         return{'id': self.id, 'stake': self.stake, 'payout': self.payout, 'first': self.first, 'second': self.second, 'third': self.third}
@@ -33,7 +35,7 @@ class Tournament(db.Model):
 class Participant(db.Model):
     __tablename__ = "participants"
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_name = db.Column(db.Integer, db.ForeignKey('users.id'))
     tournament_id = db.column(db.Integer, db.ForeignKey('tournaments.id'))
 
     def json(self):

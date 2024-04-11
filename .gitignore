@@ -33,9 +33,9 @@ MANIFEST
 *.manifest
 *.spec
 
-database
-
 logs
+
+compose.yml
 
 
 # Installer logs

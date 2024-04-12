@@ -23,9 +23,9 @@ class JoinTournamentButton(discord.ui.View):
     @discord.ui.button(label="Join Poker Database", style=discord.ButtonStyle.green, custom_id='join_pk_db')
     async def join_pk_db(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_message("You are now registered to compete against degenerate gamblers.", ephemeral=True)
-        logger.info(f"{interaction.user} -- {interaction.id} -- {interaction.data}")
+        logger.info(f"{interaction.user.id} -- {interaction.id} -- {interaction.data}")
         await self.create_db_connect()
-        await self.db_conn.execute('INSERT INTO users(username, bankroll) VALUES ($1, $2)', interaction.user.name, 0)
+        await self.db_conn.execute('INSERT INTO users(discord_name, discord_id, bankroll) VALUES ($1, $2, $3)', interaction.user.name, interaction.user.id, 0)
 
 
 class Users(commands.Cog):

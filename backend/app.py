@@ -13,7 +13,8 @@ db = SQLAlchemy(app)
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), nullable=False, unique=True)
+    discord_name = db.Column(db.String(80), nullable=False, unique=True)
+    discord_id = db.Column(db.BigInteger, nullable=False, unique=True)
     bankroll = db.Column(db.Integer, nullable=False, default=0)
 
     def json(self):
@@ -24,19 +25,20 @@ class Tournament(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     stake = db.Column(db.Integer, nullable=False, default=0)
     payout = db.Column(db.Integer, nullable=True, default=0)
-    first = db.Column(db.String(80), nullable=True, default="")
-    second = db.Column(db.String(80), nullable= True, default="")
-    third = db.Column(db.String(80), nullable=True, default="")
+    first = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
+    second = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
+    third = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
     ongoing = db.Column(db.Boolean, nullable=False, default="True")
 
     def json(self):
         return{'id': self.id, 'stake': self.stake, 'payout': self.payout, 'first': self.first, 'second': self.second, 'third': self.third}
 
 class Participant(db.Model):
-    __tablename__ = "participants"
+    __tablename__ = 'participants'
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.Integer, db.ForeignKey('users.id'))
-    tournament_id = db.column(db.Integer, db.ForeignKey('tournaments.id'))
+    discord_id = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'))
+    discord_name = db.Column(db.String(80), db.ForeignKey('users.discord_name'))
+    tournament_id = db.Column(db.Integer, db.ForeignKey('tournaments.id'))
 
     def json(self):
         return{'id': self.id, 'user_id': self.id, 'tournament_id': self.tournament_id}

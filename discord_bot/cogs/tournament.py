@@ -13,6 +13,7 @@ logger = settings.logging.getLogger("bot")
 
 class Confirm(discord.ui.View):
     def __init___(self, bot):
+        super().__init__(timeout=None)
         self.bot = bot
         self.logger = logger
         self.db_conn = None
@@ -21,22 +22,59 @@ class Confirm(discord.ui.View):
         self.db_conn = await asyncpg.connect(dsn=environ.get("DATABASE_URL"))
         logger.info(f"db connections successful")
 
-    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green)
+    @discord.ui.button(label="Register for Tournament", style=discord.ButtonStyle.green)
     async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message('Confirming', ephemeral=True)
         logger.info(f"{interaction.user} -- {interaction.id} -- {interaction.data}")
         await self.create_db_connect()
-        await self.db_conn.execute('INSERT INTO participants(username) VALUES ($1)', interaction.user.name)
-        self.value=True
-        self.stop()
 
-    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.danger)
+        get_tourney_information = await self.db_conn.fetchrow(
+            'SELECT * FROM tournaments WHERE ongoing = $1', True
+        )
+
+        tournament_information = dict(get_tourney_information)
+
+        logger.info(f"{tournament_information}")
+
+        get_discord_id = await self.db_conn.fetchrow(
+            'SELECT * FROM participants WHERE discord_id = $1 AND tournament_id = $2', interaction.user.id, tournament_information["id"]
+        )
+
+        if get_discord_id is None:
+            await self.db_conn.execute('INSERT INTO participants(discord_id, discord_name, tournament_id) VALUES ($1, $2, $3)', interaction.user.id, interaction.user.name, tournament_information['id'])
+            await self.db_conn.execute('UPDATE users SET bankroll = bankroll - $1 WHERE discord_id = $2', tournament_information["stake"], interaction.user.id)
+            await self.db_conn.execute('UPDATE tournaments SET payout = payout + $1 WHERE id = $2', tournament_information["stake"], tournament_information["id"])
+            await interaction.response.send_message('Registration confirmed', ephemeral=True)
+        else:
+            await interaction.response.send_message('Already registered for tournament', ephemeral=True)
+
+    @discord.ui.button(label="Un-Register for Tournament", style=discord.ButtonStyle.danger)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message('Cancelling', ephemeral=True)
         logger.info(f"{interaction.user} -- {interaction.id} -- {interaction.data}")
-        self.value=False
-        self.stop()
-    
+
+        get_tournament_information = await self.db_conn.fetchrow(
+            'SELECT * FROM tournaments WHERE ongoing = $1', True
+        )
+
+        tournament_information = dict(get_tournament_information)
+
+        logger.info(f"{tournament_information}")
+
+        get_discord_id = await self.db_conn.fetchrow(
+            'SELECT * FROM participants WHERE discord_id = $1 AND tournament_id = $2', interaction.user.id, tournament_information["id"]
+        )
+
+        if get_discord_id:
+            await self.db_conn.execute(
+                'DELETE FROM participants WHERE discord_id = $1 AND tournament_id = $2', interaction.user.id, tournament_information['id']
+                )
+            await self.db_conn.execute(
+                'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', tournament_information["stake"], interaction.user.id
+                ) 
+            await self.db_conn.execute('UPDATE tournaments SET payout = payout - $1 WHERE id = $2', tournament_information["stake"], tournament_information["id"])
+            await interaction.response.send_message('You have been unregistered from the tournament', ephemeral=True)
+        else:
+            await interaction.response.send_message('You are not currently registered for this tournaments', ephemeral=True)
+
 class Tournaments(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -74,11 +112,11 @@ class Tournaments(commands.Cog):
         
         await self.create_db_connect()
 
-        is_ongoing_game = await self.db_conn.fetch(
+        is_ongoing_game = await self.db_conn.fetchrow(
             'SELECT * FROM tournaments WHERE ongoing = $1', True
         )
 
-        if len(is_ongoing_game) >= 1:
+        if is_ongoing_game:
             embed = discord.Embed(
             colour=discord.Color.red(),
             title="♥️♣️Boink Gang North American Poker Tour♠️♦️",
@@ -86,9 +124,9 @@ class Tournaments(commands.Cog):
             embed.add_field(name="1 Tournament at a Time", value="Hold your horses", inline=False)
             await context.send(embed=embed)
 
-        elif len(is_ongoing_game) == 0:
+        elif is_ongoing_game is None:
 
-            view = Confirm()
+            view = Confirm(timeout=600)
             start_time = datetime.now(ZoneInfo("Canada/Eastern")) + timedelta(minutes=add_minutes)
 
             formatted_start_time = '{:%I:%M %p}'.format(start_time)
@@ -98,8 +136,8 @@ class Tournaments(commands.Cog):
             formatted_end_time = '{:%I:%M %p}'.format(end_time)
 
             await self.db_conn.execute(
-                'INSERT INTO tournaments(stake, payout, first, second, third, ongoing) VALUES ($1, $2, $3, $4, $5, $6)',
-                stake, 0, "", "", "", True
+                'INSERT INTO tournaments(stake, payout, ongoing) VALUES ($1, $2, $3)',
+                stake, 0, True
             )
 
             embed = discord.Embed(
@@ -125,10 +163,10 @@ class Tournaments(commands.Cog):
     async def end(self, context: Context, first : str, second : str, third : str, deal : bool):
         
         await self.create_db_connect()
-        is_ongoing_game = await self.db_conn.fetch(
+        get_tournament_information = await self.db_conn.fetchrow(
             'SELECT * FROM tournaments WHERE ongoing = $1', True
         )
-        if len(is_ongoing_game) == 0:
+        if get_tournament_information is None:
             embed = discord.Embed(
             colour=discord.Color.red(),
             title="♥️♣️Boink Gang North American Poker Tour♠️♦️",
@@ -136,21 +174,53 @@ class Tournaments(commands.Cog):
             embed.add_field(name="No Tournaments to End", value="Start One and Invite Mans", inline=False)
             await context.send(embed=embed)
         else:
-            game = []
-            for ongoing_game in is_ongoing_game:
-                game.append(dict(ongoing_game))
-            
-            await self.db_conn.execute(
-            'UPDATE tournaments SET first = $1, second = $2, third = $3, ongoing = $4 WHERE id = $5', first, second, third, False, game[0]['id']
-            )
-            logger.info(f"{game}")
+            tournament_information = dict(get_tournament_information)
+            logger.info(tournament_information)
 
+            scrubbed_first_place_id = [int(char) for char in first if char.isdigit()]
+            scrubbed_second_place_id = [int(char) for char in second if char.isdigit()]
+            scrubbed_third_place_id = [int(char) for char in third if char.isdigit()]
+            joined_first_place_id = int(''.join(str(num) for num in scrubbed_first_place_id))
+            joined_second_place_id = int(''.join(str(num) for num in scrubbed_second_place_id))
+            joined_third_place_id = int(''.join(str(num) for num in scrubbed_third_place_id))
+
+
+            logger.info(f"{joined_first_place_id}")
+            logger.info(f"{joined_second_place_id}")
+            logger.info(f"{joined_third_place_id}")
+
+
+            await self.db_conn.execute(
+            'UPDATE tournaments SET first = $1, second = $2, third = $3, ongoing = $4 WHERE id = $5', joined_first_place_id, joined_second_place_id,  joined_third_place_id, False, tournament_information['id']
+            )
+            if deal == True:
+                first_place_payout = int(get_tournament_information["payout"] * 0.65)
+                second_place_payout = int(get_tournament_information["payout"] * 0.35)
+                await self.db_conn.execute(
+                    'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', first_place_payout, joined_first_place_id
+                )
+                await self.db_conn.execute(
+                    'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', second_place_payout, joined_second_place_id
+                )
+
+            elif deal == False:
+                first_place_payout = int(get_tournament_information["payout"])
+                await self.db_conn.execute(
+                    'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', first_place_payout, joined_first_place_id
+                )
+            
             
             embed = discord.Embed(
                 colour=discord.Color.dark_gold(),
                 title="♥️♣️Boink Gang North American Poker Tour♠️♦️",
             )
             embed.add_field(name="Deal Made?", value=deal, inline=False)
+
+            if deal == True:
+                embed.add_field(name="Payout", value=f"First Place: {int(tournament_information['stake'] * 0.65)} || Second Place: {int(tournament_information['stake'] * 0.35)}", inline=False)
+            else:
+                embed.add_field(name="Payout", value=f"First Place: {(tournament_information['stake'])}", inline=False)
+
             embed.add_field(name="🥇First Place", value=first, inline=False)
             embed.add_field(name="🥈Second Place", value=second, inline=False)
             embed.add_field(name="🥉Third Place", value=third, inline=False)

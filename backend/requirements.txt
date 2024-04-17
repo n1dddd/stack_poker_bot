@@ -2,4 +2,3 @@ flask
 psycopg2-binary
 Flask-SQLAlchemy
 Flask-CORS
-asyncpg==0.22

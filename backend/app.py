@@ -37,6 +37,7 @@ class Participant(db.Model):
     discord_id = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'))
     discord_name = db.Column(db.String(80), db.ForeignKey('users.discord_name'))
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournaments.id'))
+    rebuy_amt = db.Column(db.Integer, nullable=True, default=0)
 
     def json(self):
         return{'id': self.id, 'user_id': self.id, 'tournament_id': self.tournament_id}
@@ -44,18 +45,50 @@ class Participant(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/test', methods=['GET'])
-def test():
-    return jsonify({'message': 'the server is running'})
+    users = []
+
+    tournaments = []
+
+    participants = []
+
+    users.append(User(discord_id=84205293101154304, discord_name='stef'))
+    users.append(User(discord_id=89918396170268672, discord_name='dan'))
+    users.append(User(discord_id=189043397489721345, discord_name='alex'))
+    users.append(User(discord_id=150297317658984448, discord_name='denya'))
+    users.append(User(discord_id=799796051157975090, discord_name='dasik'))
+    users.append(User(discord_id=572499409661853698, discord_name='artem'))
+    db.session.add_all(users)
+    db.session.commit()
+
+    tournaments.append(Tournament(stake=20, payout=300, first=89918396170268672, second=150297317658984448, third=572499409661853698, ongoing=False))
+    db.session.add_all(tournaments)
+    db.session.commit()
     
-@app.route('/api/flask/users', methods=['GET'])
-def get_users():
-    try:
-        users = User.query.all()
-        users_data = [{'id': user.id, 'username': user.username, 'bankroll': user.bankroll} for user in users]
-        return jsonify(users_data), 200
-    except Exception as e:
-        return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
+    participants.append(Participant(discord_id=84205293101154304, discord_name='stef', tournament_id=1, rebuy_amt=0))
+    participants.append(Participant(discord_id=89918396170268672, discord_name='dan', tournament_id=1, rebuy_amt=1))
+    participants.append(Participant(discord_id=189043397489721345, discord_name='alex', tournament_id=1, rebuy_amt=0))
+    participants.append(Participant(discord_id=150297317658984448, discord_name='denya', tournament_id=1, rebuy_amt=2))
+    participants.append(Participant(discord_id=799796051157975090, discord_name='dasik', tournament_id=1, rebuy_amt=5))
+    participants.append(Participant(discord_id=572499409661853698, discord_name='artem', tournament_id=1, rebuy_amt=1))
+    db.session.add_all(participants)
+    db.session.commit()
+
+# with app.app_context():
+#     db.create_all()
+
+
+# @app.route('/test', methods=['GET'])
+# def test():
+#     return jsonify({'message': 'the server is running'})
+    
+# @app.route('/api/flask/users', methods=['GET'])
+# def get_users():
+#     try:
+#         users = User.query.all()
+#         users_data = [{'id': user.id, 'username': user.username, 'bankroll': user.bankroll} for user in users]
+#         return jsonify(users_data), 200
+#     except Exception as e:
+#         return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
     
 # app.route('/api/flask/users/<id>', methods=['GET'])
 # def get_user(id):

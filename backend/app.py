@@ -1,21 +1,19 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
-
-
 app = Flask(__name__)
 CORS(app)
-
 app.config["SQLALCHEMY_DATABASE_URI"] = environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    discord_name = db.Column(db.String(80), nullable=False, unique=True)
     discord_id = db.Column(db.BigInteger, nullable=False, unique=True)
-    bankroll = db.Column(db.Integer, nullable=False, default=0)
+    discord_name = db.Column(db.String(80), nullable=False, unique=True)
+    bankroll = db.Column(db.Integer, nullable=True, default=0)
 
     def json(self):
         return{'id': self.id, 'username': self.username, 'bankroll': self.bankroll}

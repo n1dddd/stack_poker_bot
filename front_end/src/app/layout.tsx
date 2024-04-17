@@ -1,8 +1,9 @@
 import "~/styles/globals.css";
+import { TopNav } from "./_components/topnav";
 
-import { Inter } from "next/font/google";
+import { Arimo } from "next/font/google";
 
-const inter = Inter({
+const arimo = Arimo({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -20,7 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>{children}</body>
+      <body className={`font-sans ${arimo.variable}`}>
+        <div className="flex flex-col">
+          <TopNav/>
+          <main>
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   );
 }

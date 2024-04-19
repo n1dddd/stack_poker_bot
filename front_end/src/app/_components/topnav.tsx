@@ -70,11 +70,11 @@ export function TopNav() {
                             <MotionLink 
                                 key={asset.id} 
                                 href={asset.path} 
-                                className={cn("rounded-md font-bold text-3xl py-2 px-2 transition-all duration-500 ease-out hover:bg-zinc-700",
+                                className={cn("rounded-md font-bold text-2xl p-4 transition-all duration-500 ease-out hover:bg-zinc-700",
                                 pathname === asset.path ? "bg-zinc-600" : null
 
                                 )}>
-                                <motion.li key={asset.id} className="flex flex-row justify-between flex-shrink">
+                                <motion.li key={asset.id} className="flex flex-row gap-4 justify-between">
                                     <MotionImage
                                         key={asset.id}
                                         src={asset.suit}

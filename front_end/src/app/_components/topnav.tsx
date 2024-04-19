@@ -47,8 +47,8 @@ export function TopNav() {
     const MotionLink = motion(Link)
     const MotionImage = motion(Image)
     return (
-        <div className="w-full flex-row self-center justify-self-center">
-            <nav className="grid grid-cols-12 gap-8">
+        <div className="2xl:w-3/4 w-full flex-row self-center justify-self-center py-8">
+            <nav className="grid grid-cols-12 gap-4">
                 <div className="lg:col-span-5 col-span-12">
                     <Link href={"/"}>
                         <Image
@@ -74,7 +74,7 @@ export function TopNav() {
                                 pathname === asset.path ? "bg-zinc-600" : null
 
                                 )}>
-                                <motion.li key={asset.id} className="flex flex-row gap-4 justify-between flex-shrink">
+                                <motion.li key={asset.id} className="flex flex-row justify-between flex-shrink">
                                     <MotionImage
                                         key={asset.id}
                                         src={asset.suit}

@@ -1,5 +1,5 @@
 import "~/styles/globals.css";
-import { TopNav } from "./_components/topnav";
+import { TopNav } from "./_components/topnav"
 
 import { Arimo } from "next/font/google";
 
@@ -21,13 +21,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${arimo.variable}`}>
-        <div className="flex flex-col">
+      <body className={`font-sans ${arimo.variable} dark flex flex-col`}>
           <TopNav/>
           <main>
             {children}
           </main>
-        </div>
       </body>
     </html>
   );

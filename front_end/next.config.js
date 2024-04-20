@@ -4,7 +4,16 @@
  */
 await import("./src/env.js");
 
-/** @type {import("next").NextConfig} */
-const config = {};
-
-export default config;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    rewrites: async () => {
+      return [
+        {
+          source: '/:path*',
+          destination: 'http://127.0.0.1:4000/:path*'
+        },
+      ]
+    },
+  }
+  
+export default nextConfig;

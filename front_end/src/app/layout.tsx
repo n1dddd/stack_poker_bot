@@ -1,5 +1,5 @@
 import "~/styles/globals.css";
-import { TopNav } from "./_components/topnav"
+import { TopNav } from "../components/topnav"
 
 import { Arimo } from "next/font/google";
 

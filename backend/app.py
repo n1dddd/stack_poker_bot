@@ -77,28 +77,28 @@ with app.app_context():
 #     db.create_all()
 
 
-# @app.route('/test', methods=['GET'])
-# def test():
-#     return jsonify({'message': 'the server is running'})
+@app.route('/api/flask/test', methods=['GET'])
+def test():
+    return jsonify({'message': 'the server is running'})
     
-# @app.route('/api/flask/users', methods=['GET'])
-# def get_users():
-#     try:
-#         users = User.query.all()
-#         users_data = [{'id': user.id, 'username': user.username, 'bankroll': user.bankroll} for user in users]
-#         return jsonify(users_data), 200
-#     except Exception as e:
-#         return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
+@app.route('/api/flask/users', methods=['GET'])
+def get_users():
+    try:
+        users = User.query.all()
+        users_data = [{'id': user.discord_id, 'username': user.discord_name, 'bankroll': user.bankroll} for user in users]
+        return jsonify(users_data), 200
+    except Exception as e:
+        return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
     
-# app.route('/api/flask/users/<id>', methods=['GET'])
-# def get_user(id):
-#     try:
-#         user = User.query.filter_by(id=id).first()
-#         if user:
-#             return make_response(jsonify({'user': user.json()}), 200)
-#         return make_response(jsonify({'message':'user not found'}), 404)
-#     except Exception as e:
-#         return make_response(jsonify({'message':'error getting user', 'error': str(e)}), 500)
+app.route('/api/flask/users/<id>', methods=['GET'])
+def get_user(id):
+    try:
+        user = User.query.filter_by(id=id).first()
+        if user:
+            return make_response(jsonify({'user': user.json()}), 200)
+        return make_response(jsonify({'message':'user not found'}), 404)
+    except Exception as e:
+        return make_response(jsonify({'message':'error getting user', 'error': str(e)}), 500)
 
 # @app.route('/api/flask/users', methods=['POST'])
 # def create_user():

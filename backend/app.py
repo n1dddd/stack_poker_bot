@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
 from os import environ
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +15,7 @@ class User(db.Model):
     discord_id = db.Column(db.BigInteger, nullable=False, unique=True)
     discord_name = db.Column(db.String(80), nullable=False, unique=True)
     bankroll = db.Column(db.Integer, nullable=True, default=0)
+    avatar_url = db.Column(db.String(255), nullable=True, unique=False, default="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThQ_mJzFSBReUZorw2OFBccmXNjdsfzleL1Q5JuoNKMA&s")
 
     def json(self):
         return{'id': self.id, 'username': self.username, 'bankroll': self.bankroll}
@@ -27,6 +29,7 @@ class Tournament(db.Model):
     second = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
     third = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
     ongoing = db.Column(db.Boolean, nullable=False, default="True")
+    start_time = db.Column(db.DateTime, default=datetime.now)
 
     def json(self):
         return{'id': self.id, 'stake': self.stake, 'payout': self.payout, 'first': self.first, 'second': self.second, 'third': self.third}
@@ -51,25 +54,26 @@ with app.app_context():
 
     participants = []
 
-    users.append(User(discord_id=84205293101154304, discord_name='stef'))
-    users.append(User(discord_id=89918396170268672, discord_name='dan'))
-    users.append(User(discord_id=189043397489721345, discord_name='alex'))
-    users.append(User(discord_id=150297317658984448, discord_name='denya'))
-    users.append(User(discord_id=799796051157975090, discord_name='dasik'))
-    users.append(User(discord_id=572499409661853698, discord_name='artem'))
+    users.append(User(discord_id=84205293101154304, discord_name='stef_.'))
+    users.append(User(discord_id=89918396170268672, discord_name='n1d'))
+    users.append(User(discord_id=189043397489721345, discord_name='aven5187'))
+    users.append(User(discord_id=150297317658984448, discord_name='denya9'))
+    users.append(User(discord_id=799796051157975090, discord_name='dnd.gaw'))
+    users.append(User(discord_id=572499409661853698, discord_name='babushka_frosia'))
     db.session.add_all(users)
     db.session.commit()
 
-    tournaments.append(Tournament(stake=20, payout=300, first=89918396170268672, second=150297317658984448, third=572499409661853698, ongoing=False))
+    tournaments.append(Tournament(stake=20, payout=300, first=799796051157975090, second=150297317658984448, third=572499409661853698, ongoing=False))
+
     db.session.add_all(tournaments)
     db.session.commit()
     
-    participants.append(Participant(discord_id=84205293101154304, discord_name='stef', tournament_id=1, rebuy_amt=0))
-    participants.append(Participant(discord_id=89918396170268672, discord_name='dan', tournament_id=1, rebuy_amt=1))
-    participants.append(Participant(discord_id=189043397489721345, discord_name='alex', tournament_id=1, rebuy_amt=0))
-    participants.append(Participant(discord_id=150297317658984448, discord_name='denya', tournament_id=1, rebuy_amt=2))
-    participants.append(Participant(discord_id=799796051157975090, discord_name='dasik', tournament_id=1, rebuy_amt=5))
-    participants.append(Participant(discord_id=572499409661853698, discord_name='artem', tournament_id=1, rebuy_amt=1))
+    participants.append(Participant(discord_id=84205293101154304, discord_name='stef_.', tournament_id=1, rebuy_amt=0))
+    participants.append(Participant(discord_id=89918396170268672, discord_name='n1d', tournament_id=1, rebuy_amt=1))
+    participants.append(Participant(discord_id=189043397489721345, discord_name='aven5187', tournament_id=1, rebuy_amt=0))
+    participants.append(Participant(discord_id=150297317658984448, discord_name='denya9', tournament_id=1, rebuy_amt=2))
+    participants.append(Participant(discord_id=799796051157975090, discord_name='dnd.gaw', tournament_id=1, rebuy_amt=5))
+    participants.append(Participant(discord_id=572499409661853698, discord_name='babushka_frosia', tournament_id=1, rebuy_amt=1))
     db.session.add_all(participants)
     db.session.commit()
 
@@ -80,7 +84,51 @@ with app.app_context():
 @app.route('/api/flask/test', methods=['GET'])
 def test():
     return jsonify({'message': 'the server is running'})
-    
+
+@app.route('/api/flask/most_recent_tournament_with_users', methods=['GET'])
+def get_most_recent_tournament_with_users():
+    try:
+        # Query the most recent tournament entry based on start_time
+        most_recent_tournament = Tournament.query.order_by(Tournament.start_time.desc()).first()
+        
+        # Check if there's any tournament entry
+        if most_recent_tournament:
+            # Get user information for the tournament entries
+            first_user = User.query.filter_by(discord_id=most_recent_tournament.first).first()
+            second_user = User.query.filter_by(discord_id=most_recent_tournament.second).first()
+            third_user = User.query.filter_by(discord_id=most_recent_tournament.third).first()
+            
+            tournament_data = {
+                'id': most_recent_tournament.id,
+                'stake': most_recent_tournament.stake,
+                'payout': most_recent_tournament.payout,
+                'first': {
+                    'discord_id': first_user.discord_id,
+                    'discord_name': first_user.discord_name,
+                    'bankroll': first_user.bankroll,
+                    'avatar_url': first_user.avatar_url
+                } if first_user else None,
+                'second': {
+                    'discord_id': second_user.discord_id,
+                    'discord_name': second_user.discord_name,
+                    'bankroll': second_user.bankroll,
+                    'avatar_url': second_user.avatar_url
+                } if second_user else None,
+                'third': {
+                    'discord_id': third_user.discord_id,
+                    'discord_name': third_user.discord_name,
+                    'bankroll': third_user.bankroll,
+                    'avatar_url': third_user.avatar_url
+                } if third_user else None,
+                'ongoing': most_recent_tournament.ongoing,
+                'start_time': most_recent_tournament.start_time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            return jsonify(tournament_data), 200
+        else:
+            return jsonify({'message': 'No tournament entries found'}), 404
+    except Exception as e:
+        return make_response(jsonify({'message': 'Error getting most recent tournament with users', 'error': str(e)}), 500)
+        
 @app.route('/api/flask/users', methods=['GET'])
 def get_users():
     try:

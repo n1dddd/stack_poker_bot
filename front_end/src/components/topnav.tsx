@@ -53,7 +53,7 @@ export function TopNav() {
     const MotionImage = motion(Image)
     const [isOpen, setIsOpen] = React.useState(false)
     return (
-        <div className="2xl:w-3/4 w-full flex-row self-center justify-self-center py-8">
+        <div className="2xl:w-3/4 xl:px-0 px-4 w-full flex-row self-center justify-self-center py-8">
             <nav className="grid grid-cols-12 gap-4">
                 <div className="lg:col-span-5 col-span-12">
                     <Link href={"/"}>

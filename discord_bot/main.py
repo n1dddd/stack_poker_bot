@@ -11,6 +11,8 @@ logger = settings.logging.getLogger("bot")
 guild = settings.MY_GUILD
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
+intents.guilds = True
 
 
 class DiscordBot(commands.Bot):

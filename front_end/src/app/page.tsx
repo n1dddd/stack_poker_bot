@@ -1,13 +1,14 @@
-"use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-export default function HomePage() {
+async function getUsers() {
+  const response = await fetch('http://localhost:4000/api/flask/most_recent_tournament_with_users')
+  .then(res =>  {return res.json()})
+  return response;
+}
 
-  useEffect(() => {
-    fetch('/api/flask/users')
-      .then(res => console.log(res.json()))
-  }) 
+export default async function HomePage() {
+  const most_recent_tournament = await getUsers();
+  console.log(most_recent_tournament);
   return (
     <main className="">
       <div className="flex "></div>

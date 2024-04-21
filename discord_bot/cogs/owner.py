@@ -1,11 +1,15 @@
 import discord
+import settings
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
+logger = settings.logging.getLogger("bot")
+
 class Owner(commands.Cog, name="owner"):
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.logger = logger 
 
     
     @commands.command(
@@ -36,6 +40,17 @@ class Owner(commands.Cog, name="owner"):
             description="The scope must be global or guild", color=0xE02B2B
         )
         await context.send(embed=embed)
+
+    @commands.command(
+    name="members",
+    description="Grabs all member info",
+    )
+    @app_commands.describe(scope="Only is scope of guild")
+    @commands.is_owner()
+    async def members(self, context: Context) -> None:
+        for guild in self.bot.guilds:
+            for member in guild.members:
+                logger.info(f"{member}")
 
 async def setup(bot) -> None:
     await bot.add_cog(Owner(bot))

@@ -32,24 +32,3 @@ That beautiful off-white and those darker gray shadowed elements. Lets not forge
 ## Where I am so Far
 
 I am continuing development, I have successfully called to the Flask API in the front end locally. Next steps would be to construct a display UI for recent tournament results (like in the figma mockup), since most of the MVP bot functions are completed.
-
-
-
-
-
-
-I greatly enjoyed bringing the idea to life, and host the design [here!!!](https://threejs-jordan-history.vercel.app/)
-
-## Final Product
-
-### Loading State Before 3D Models Are Loaded In
-
-!["Loading Landing Page"](./docs/Loading_State.gif)
-
-### Spinning of the Gallery of 3D Jordan 1 Shoes
-
-!["Spinning Gallery of 3D Jordan 1 Shoes"](./docs/Spin_a_shoe.gif)
-
-### Individual Shoe States, Camera Movement and State Change
-
-!["Individual Jordan 1 Shoe With Text Card"](./docs/Individual_Shoe_States.gif)

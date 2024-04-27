@@ -10,7 +10,7 @@ figured there had to be a better way. In the end, I settled on a Next.js fronten
 I went away at programming a discord bot, and breathed life into it as I 
 connected my Flask Postgres powered backend to it. I quickly ran into another issue. What in the hell am I gonna do for assets? This community I am part of is tight knit in a sense, I have known some of them for 20 years, some for less than a year. Lively mix. Anyways, we all at some time played a video game together that had a certain asset that created a certain type of dopamine. The asset can be seen below
 
-!["White Bag From Realm of the Mad God"](https://www.realmeye.com/forum/uploads/default/original/3X/2/0/201d3156c26a462be5405f3d3379833c45411874.png)
+!["White Bag From Realm of the Mad God"](https://www.realmeye.com/forum/uploads/default/original/3X/2/0/201d3156c26a462be5405f3d3379833c45411874.png | width = 100)
 
 That beautiful off-white and those darker gray shadowed elements. Lets not forget that elegant choice of blue(s). When this "bag" dropped from an enemy, it contained some of the most coveted equipment in the game. So I decided on this colour pallete to create the front end.
 

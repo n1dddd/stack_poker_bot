@@ -23,9 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${arimo.variable} dark flex flex-col`}>
           <TopNav/>
-          <main>
-            {children}
-          </main>
+          {children}
       </body>
     </html>
   );

@@ -99,20 +99,18 @@ export function TopNav() {
                                     }}
                                     >
                                     <motion.li 
-                                        key={asset.id} 
                                         className="flex flex-row gap-4 justify-between linear-mask drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
                                         
                                         >
                                         <MotionImage
-                                            key={asset.id}
                                             src={asset.suit}
                                             className="self-center"
                                             width={25}
+                                            height={25}
                                             alt={asset.alt}
                                             style={{ objectFit: "contain" }}
                                         ></MotionImage>
                                         <motion.span 
-                                        key={asset.id}
                                         className=""
                                         >{asset.option}</motion.span>
                                     </motion.li>
@@ -162,13 +160,13 @@ export function TopNav() {
                                         >
                                         <motion.li key={asset.id} className="flex w-full justify-between linear-mask drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
                                             <MotionImage
-                                                key={asset.id}
                                                 src={asset.suit}
                                                 width={25}
+                                                height={25}
                                                 alt={asset.alt}
                                                 style={{ objectFit: "contain" }}
                                             ></MotionImage>
-                                            <motion.span key={asset.id}>{asset.option}</motion.span>
+                                            <motion.span>{asset.option}</motion.span>
                                         </motion.li>
                                     </MotionLink>
                                 ))}

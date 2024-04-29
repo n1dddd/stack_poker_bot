@@ -6,14 +6,9 @@ await import("./src/env.js");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    rewrites: async () => {
-      return [
-        {
-          source: '/:path*',
-          destination: 'http://localhost:4000/:path*'
-        },
-      ]
-    },
+    images: {
+      domains: ["encrypted-tbn0.gstatic.com"]
+    }
   }
   
 export default nextConfig;

@@ -137,8 +137,8 @@
     inset 20px 0 300px rgb(204, 155, 48),  /* inner left magenta broad */
     inset -20px 0 300px rgb(204, 155, 48), /* inner right cyan broad */
     0 0 50px #fff,            /* outer white */
-    -10px 0 20px rgb(204, 155, 48),        /* outer left magenta */
-    10px 0 20px rgb(63, 63, 63);         /* outer right cyan */
+    -10px 0 20px rgb(182, 136, 37),        /* outer left magenta */
+    10px 0 20px rgb(182, 136, 37);         /* outer right cyan */
 }
   &.silver{
     box-shadow:
@@ -148,8 +148,8 @@
     inset 20px 0 300px rgb(34, 34, 34),  /* inner left magenta broad */
     inset -20px 0 300px rgb(182, 182, 182), /* inner right cyan broad */
     0 0 50px #5c5c5c,            /* outer white */
-    -10px 0 80px rgb(211, 211, 211),        /* outer left magenta */
-    10px 0 80px rgb(63, 63, 63);         /* outer right cyan */
+    -10px 0 80px rgb(148, 148, 148),        /* outer left magenta */
+    10px 0 80px rgb(148, 148, 148);         /* outer right cyan */
   }
   &.bronze {
     box-shadow:
@@ -160,7 +160,7 @@
     inset -20px 0 300px rgb(204, 105, 48), /* inner right cyan broad */
     0 0 50px #fff,            /* outer white */
     -10px 0 80px rgb(204, 97, 48),        /* outer left magenta */
-    10px 0 80px rgb(63, 63, 63);         /* outer right cyan */
+    10px 0 80px rgb(204, 97, 48);         /* outer right cyan */
   }
 
   }

@@ -18,59 +18,62 @@ export default async function Podium() {
             id: 3,
             source: Bronze,
             alt: "Stack Poker Club Bronze Medal",
-            order: 3,
+            order: 1,
             height: "375px",
             background: `bronze`,
             user: most_recent_tournament.third,
-            flavour_text: "#3"
+            flavour_text: "Third Place"
         },
         {
             id: 1,
             source: Gold,
             alt: "Stack Poker Club Gold Medal",
-            order: 1,
+            order: 2,
             height: "575px",
             background: `gold`,
             user: most_recent_tournament.first,
-            flavour_text: "#1",
+            flavour_text: "First Place",
             payout: most_recent_tournament.payout
         },
         {
             id: 2,
             source: Silver,
             alt: "Stack Poker Club Silver Medal",
-            order: 2,
+            order: 3,
             height: "475px",
             background: `silver`,
             user: most_recent_tournament.second,
-            flavour_text: "#2"
+            flavour_text: "Second Place"
         },
     ]
 
     console.log(most_recent_tournament);
     return (
-        <div className="px-8 w-full flex-col self-center justify-self-center py-8 rounded-md">
-            <div className="lg:flex flex-col gap-2">
-                <h1 className="flex text-4xl text-stroke font-bold text-center">Most Recent Tournament Result</h1>
-                <h1 className="flex text-2xl text-stroke font-bold text-center">When: {most_recent_tournament.start_time}</h1>
-                <h1 className="flex text-2xl text-stroke font-bold text-center">Stake: ${most_recent_tournament.stake}</h1>
+        <div className="px-8 w-full flex-col self-center justify-self-center py-2 rounded-md">
+            <div className="flex flex-col gap-4">
+                <h1 className="flex text-6xl text-stroke font-bold text-center">Recent Tournament Result</h1>
+                <h1 className="flex text-3xl text-stroke font-bold ">When: {most_recent_tournament.start_time}</h1>
+                <h1 className="flex text-3xl text-stroke font-bold">Stake: ${most_recent_tournament.stake}</h1>
             </div>
-            <div className="flex lg:flex-row flex-col justify-between pt-12">
+            <div className="flex lg:flex-row flex-col justify-between pt-14">
                 {assetList.map((asset) => (
                     <div key={asset.id} className="lg:w-1/3 w-full flex flex-col items-center justify-end gap-8" style={{ order: `${asset.order}` }}>
-                        <div className="w-full h-full flex flex-col items-center py-8">
-                                <Image
-                                    src={asset.user.avatar_url}
-                                    width={100}
-                                    height={100}
-                                    className="flex rounded-full drop-shadow"
-                                    alt="User Profile Picture"
-                                    style={{ objectFit: "contain" }}
-                                    quality={100}
-                                />
-                                <div className="flex h-full flex-col items-center justify-between pt-8">
-                                    <p className="flex text-3xl text-stroke font-bold text-center">@{asset.user.discord_name}</p>                                </div>
+                        <div className={`w-4/5 rounded-md flex flex-col items-center py-8 gap-6 glowing-component ${asset.background}`}>
+                            <h1 className="flex text-4xl text-stroke font-bold text-center">{asset.flavour_text}</h1>
+                            <Image
+                                src={asset.user.avatar_url}
+                                width={125}
+                                height={125}
+                                className="flex rounded-full drop-shadow"
+                                alt="User Profile Picture"
+                                style={{ objectFit: "contain" }}
+                                quality={100}
+                            />
+                            <div className="flex flex-col items-center">
+                                <p className="flex text-3xl text-stroke font-bold text-center">@{asset.user.discord_name}</p>
+                                {asset.payout ? (<p className="flex text-2xl text-stroke font-bold text-center py-8">Payout: ${asset.payout}</p>) : ""}                                
                             </div>
+                        </div>
                         <Image
                             src={asset.source}
                             className="flex self-center drop-shadow pt-12"

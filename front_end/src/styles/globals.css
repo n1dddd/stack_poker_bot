@@ -128,6 +128,43 @@
   }
 }
 
+.glowing-component {
+  &.gold{
+    box-shadow:
+    inset 0 0 50px #6b6b6b,      /* inner white */
+    inset 20px 0 80px rgb(204, 155, 48),   /* inner left magenta short */
+    inset -20px 0 80px rgb(204, 155, 48),  /* inner right cyan short */
+    inset 20px 0 300px rgb(204, 155, 48),  /* inner left magenta broad */
+    inset -20px 0 300px rgb(204, 155, 48), /* inner right cyan broad */
+    0 0 50px #fff,            /* outer white */
+    -10px 0 20px rgb(204, 155, 48),        /* outer left magenta */
+    10px 0 20px rgb(63, 63, 63);         /* outer right cyan */
+}
+  &.silver{
+    box-shadow:
+    inset 0 0 50px #6b6b6b,      /* inner white */
+    inset 20px 0 80px rgb(163, 163, 163),   /* inner left magenta short */
+    inset -20px 0 80px rgb(104, 104, 104),  /* inner right cyan short */
+    inset 20px 0 300px rgb(34, 34, 34),  /* inner left magenta broad */
+    inset -20px 0 300px rgb(182, 182, 182), /* inner right cyan broad */
+    0 0 50px #5c5c5c,            /* outer white */
+    -10px 0 80px rgb(211, 211, 211),        /* outer left magenta */
+    10px 0 80px rgb(63, 63, 63);         /* outer right cyan */
+  }
+  &.bronze {
+    box-shadow:
+    inset 0 0 50px #6b6b6b,      /* inner white */
+    inset 20px 0 80px rgb(131, 74, 21),   /* inner left magenta short */
+    inset -20px 0 80px rgb(180, 76, 35),  /* inner right cyan short */
+    inset 20px 0 300px rgb(141, 66, 16),  /* inner left magenta broad */
+    inset -20px 0 300px rgb(204, 105, 48), /* inner right cyan broad */
+    0 0 50px #fff,            /* outer white */
+    -10px 0 80px rgb(204, 97, 48),        /* outer left magenta */
+    10px 0 80px rgb(63, 63, 63);         /* outer right cyan */
+  }
+
+  }
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

@@ -49,7 +49,7 @@ export default async function Podium() {
 
     console.log(most_recent_tournament);
     return (
-        <div className="px-8 w-full flex-col self-center justify-self-center py-8 podium-card-color rounded-md">
+        <div className="px-8 w-full flex-col self-center justify-self-center py-8 rounded-md">
             <div className="lg:flex flex-col gap-2">
                 <h1 className="flex text-4xl text-stroke font-bold text-center">Most Recent Tournament Result</h1>
                 <h1 className="flex text-2xl text-stroke font-bold text-center">When: {most_recent_tournament.start_time}</h1>
@@ -58,17 +58,7 @@ export default async function Podium() {
             <div className="flex lg:flex-row flex-col justify-between pt-12">
                 {assetList.map((asset) => (
                     <div key={asset.id} className="lg:w-1/3 w-full flex flex-col items-center justify-end gap-8" style={{ order: `${asset.order}` }}>
-                        <Image
-                            src={asset.source}
-                            className="flex self-center drop-shadow pt-12"
-                            width={200}
-                            height={200}
-                            quality={100}
-                            alt={asset.alt}
-                            style={{ objectFit: "contain" }}
-                        />
-                        <div className={`flex flex-col rounded-md podium-card-gradient opacity-90 ${asset.background} drop-shadow`} style={{ display: "flex", width: '300px', height: `${asset.height}` }}>
-                            <div className="w-full h-full flex flex-col items-center py-8">
+                        <div className="w-full h-full flex flex-col items-center py-8">
                                 <Image
                                     src={asset.user.avatar_url}
                                     width={100}
@@ -79,11 +69,17 @@ export default async function Podium() {
                                     quality={100}
                                 />
                                 <div className="flex h-full flex-col items-center justify-between pt-8">
-                                    <p className="flex text-3xl text-stroke font-bold text-center">@{asset.user.discord_name}</p>
-                                    {asset.payout ? (<p className="flex text-3xl text-stroke font-bold text-center py-8">Payout: ${asset.payout}</p>) : (<p className="flex text-3xl text-stroke font-bold text-center py-4">Better luck next time!</p>)}
-                                </div>
+                                    <p className="flex text-3xl text-stroke font-bold text-center">@{asset.user.discord_name}</p>                                </div>
                             </div>
-                        </div>
+                        <Image
+                            src={asset.source}
+                            className="flex self-center drop-shadow pt-12"
+                            width={400}
+                            height={700}
+                            quality={100}
+                            alt={asset.alt}
+                            style={{ objectFit: "contain" }}
+                        />
                     </div>
                 ))}
             </div>

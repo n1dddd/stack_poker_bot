@@ -20,15 +20,15 @@ const assetList = [
     {
         id: 1,
         suit: Club,
-        option: "Ranks",
-        path: "/ranks",
+        option: "Members",
+        path: "/members",
         alt: "Club Suit Menu Icon",
     },
     {
         id: 2,
         suit: Spade,
-        option: "Members",
-        path: "/members",
+        option: "Ranks",
+        path: "/ranks",
         alt: "Spade Suit Menu Icon",
     },
     {

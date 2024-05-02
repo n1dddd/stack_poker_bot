@@ -4,7 +4,7 @@ import Silver from "public/Silver.png"
 import Bronze from "public/Bronze.png"
 import Image from "next/image"
 
-async function getUsers() {
+async function getMostRecentTournament() {
     const response = await fetch('http://localhost:4000/api/flask/most_recent_tournament_with_users', { next: { revalidate: 3600 } })
         .then(res => { return res.json() })
     return response;
@@ -12,7 +12,7 @@ async function getUsers() {
 
 
 export default async function Podium() {
-    const most_recent_tournament = await getUsers();
+    const most_recent_tournament = await getMostRecentTournament();
     const assetList = [
         {
             id: 3,

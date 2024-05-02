@@ -11,7 +11,7 @@ export default async function MemberList() {
     return (
         <div className="flex flex-row gap-8 flex-wrap justify-evenly">
             {member_list.map((member) => (
-                <div className="flex flex-col bg-zinc-700 w-40 items-center p-8">
+                <div className="flex flex-col bg-zinc-900 rounded-md md:w-52 w-4/5 items-center p-8">
                     <Image
                         src={member.avatar_url}
                         width={75}
@@ -22,7 +22,7 @@ export default async function MemberList() {
                         quality={100}
                     />
 
-                    <p>@{member.username}</p>
+                    <h1 className="text-xl">@{member.username}</h1>
 
                 </div>
             ))}

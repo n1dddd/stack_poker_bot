@@ -18,7 +18,7 @@ class User(db.Model):
     avatar_url = db.Column(db.String(255), nullable=True, unique=False, default="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThQ_mJzFSBReUZorw2OFBccmXNjdsfzleL1Q5JuoNKMA&s")
 
     def json(self):
-        return{'id': self.id, 'username': self.username, 'bankroll': self.bankroll}
+        return{'id': self.id, 'discord_name': self.discord_name, 'bankroll': self.bankroll, 'avatar_url': self.avatar_url}
 
 class Tournament(db.Model):
     __tablename__ = 'tournaments'
@@ -77,14 +77,17 @@ with app.app_context():
     db.session.add_all(participants)
     db.session.commit()
 
-# with app.app_context():
-#     db.create_all()
+# Route for getting user information (Members Page)
+@app.route('/api/flask/users', methods=['GET'])
+def get_users():
+    try:
+        users = User.query.all()
+        users_data = [{'id': user.discord_id, 'username': user.discord_name, 'bankroll': user.bankroll, 'avatar_url': user.avatar_url} for user in users]
+        return jsonify(users_data), 200
+    except Exception as e:
+        return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
 
-
-@app.route('/api/flask/test', methods=['GET'])
-def test():
-    return jsonify({'message': 'the server is running'})
-
+# Home route API call for recent tournmanet podium
 @app.route('/api/flask/most_recent_tournament_with_users', methods=['GET'])
 def get_most_recent_tournament_with_users():
     try:
@@ -128,16 +131,14 @@ def get_most_recent_tournament_with_users():
             return jsonify({'message': 'No tournament entries found'}), 404
     except Exception as e:
         return make_response(jsonify({'message': 'Error getting most recent tournament with users', 'error': str(e)}), 500)
-        
-@app.route('/api/flask/users', methods=['GET'])
-def get_users():
-    try:
-        users = User.query.all()
-        users_data = [{'id': user.discord_id, 'username': user.discord_name, 'bankroll': user.bankroll} for user in users]
-        return jsonify(users_data), 200
-    except Exception as e:
-        return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
-    
+
+# Test route
+@app.route('/api/flask/test', methods=['GET'])
+def test():
+    return jsonify({'message': 'the server is running'})
+      
+
+# Test route
 app.route('/api/flask/users/<id>', methods=['GET'])
 def get_user(id):
     try:
@@ -147,6 +148,8 @@ def get_user(id):
         return make_response(jsonify({'message':'user not found'}), 404)
     except Exception as e:
         return make_response(jsonify({'message':'error getting user', 'error': str(e)}), 500)
+
+
 
 # @app.route('/api/flask/users', methods=['POST'])
 # def create_user():

@@ -26,17 +26,17 @@ const assetList = [
     },
     {
         id: 2,
-        suit: Spade,
-        option: "Ranks",
-        path: "/ranks",
-        alt: "Spade Suit Menu Icon",
-    },
-    {
-        id: 3,
         suit: Heart,
         option: "Tournaments",
         path: "/tournaments",
         alt: "Heart Suit Menu Icon",
+    },
+    {
+        id: 3,
+        suit: Spade,
+        option: "Ranks",
+        path: "/ranks",
+        alt: "Spade Suit Menu Icon",
     },
     {
         id: 4,

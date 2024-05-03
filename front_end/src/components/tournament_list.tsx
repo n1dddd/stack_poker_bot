@@ -12,7 +12,7 @@ interface TournamentInfo {
     id: number,
     stake: number,
     payout: number,
-    start_time: Date,
+    start_time: string,
     participants: ParticipantsInfo,
 }
 interface MemberInfo {

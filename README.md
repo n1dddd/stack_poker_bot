@@ -16,6 +16,10 @@ connected my Flask Postgres powered backend to it. I quickly ran into another is
 
 That beautiful off-white and those darker gray shadowed elements. Lets not forget that elegant choice of blue(s). When this "bag" dropped from an enemy, it contained some of the most coveted equipment in the game. So I decided on this colour pallete to create the front end.
 
+## Where I am so Far
+
+I am continuing development, I have successfully called to the Flask API in the front end locally. Next steps would be to construct a display UI for recent tournament results (like in the figma mockup), since most of the MVP bot functions are completed.
+
 ### Assets at Play
 
 #### Here is the bot logo:
@@ -25,12 +29,8 @@ That beautiful off-white and those darker gray shadowed elements. Lets not forge
 
 !["Figma Mockup"](https://i.imgur.com/EYm5fGw.png)
 
-#### Demo of (Responsive) Frontend...so far
+#### Front-End Demo
 
-!["Full Screen Front End"](./front_end/public/Stack_Poker_FE.gif)
+!["Responsive Front End"](./front_end/public/Stack_Poker_FE_Update_Resp.gif)
 
-!["Responsive Front End"](./front_end/public/Stack_Poker_FE_Responsive.gif)
 
-## Where I am so Far
-
-I am continuing development, I have successfully called to the Flask API in the front end locally. Next steps would be to construct a display UI for recent tournament results (like in the figma mockup), since most of the MVP bot functions are completed.

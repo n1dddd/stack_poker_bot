@@ -1,4 +1,12 @@
 import Image from "next/image";
+
+interface MemberInfo {
+    avatar_url: string,
+    bankroll: number,
+    username: string,
+    id: number
+
+}
 async function getUsers() {
     const response = await fetch('http://localhost:4000/api/flask/users', { next: { revalidate: 900 } })
         .then(res => { return res.json() })
@@ -10,8 +18,8 @@ export default async function MemberList() {
     console.log(member_list)
     return (
         <div className="flex flex-row gap-8 flex-wrap justify-evenly">
-            {member_list.map((member) => (
-                <div className="flex flex-col bg-zinc-900 rounded-md md:w-52 w-4/5 items-center p-8">
+            {member_list.map((member : MemberInfo) => (
+                <div key={member.id} className="flex flex-col bg-zinc-900 rounded-md md:w-52 w-4/5 items-center p-8">
                     <Image
                         src={member.avatar_url}
                         width={75}
@@ -23,7 +31,8 @@ export default async function MemberList() {
                     />
 
                     <h1 className="text-xl">@{member.username}</h1>
-
+                    <h1 className="text-xl">${member.bankroll}</h1>
+                    Won Tournaments = 
                 </div>
             ))}
         </div>

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from sqlalchemy import desc
 from datetime import datetime
 from os import environ
 app = Flask(__name__)
@@ -64,6 +65,7 @@ with app.app_context():
     db.session.commit()
 
     tournaments.append(Tournament(stake=20, payout=300, first=799796051157975090, second=150297317658984448, third=572499409661853698, ongoing=False))
+    tournaments.append(Tournament(stake=10, payout=100, first=89918396170268672, second=150297317658984448, third=84205293101154304, ongoing=False))
 
     db.session.add_all(tournaments)
     db.session.commit()
@@ -74,6 +76,14 @@ with app.app_context():
     participants.append(Participant(discord_id=150297317658984448, discord_name='denya9', tournament_id=1, rebuy_amt=2))
     participants.append(Participant(discord_id=799796051157975090, discord_name='dnd.gaw', tournament_id=1, rebuy_amt=5))
     participants.append(Participant(discord_id=572499409661853698, discord_name='babushka_frosia', tournament_id=1, rebuy_amt=1))
+
+    participants.append(Participant(discord_id=84205293101154304, discord_name='stef_.', tournament_id=2, rebuy_amt=0))
+    participants.append(Participant(discord_id=89918396170268672, discord_name='n1d', tournament_id=2, rebuy_amt=1))
+    participants.append(Participant(discord_id=189043397489721345, discord_name='aven5187', tournament_id=2, rebuy_amt=0))
+    participants.append(Participant(discord_id=150297317658984448, discord_name='denya9', tournament_id=2, rebuy_amt=2))
+    participants.append(Participant(discord_id=799796051157975090, discord_name='dnd.gaw', tournament_id=2, rebuy_amt=1))
+    participants.append(Participant(discord_id=572499409661853698, discord_name='babushka_frosia', tournament_id=2, rebuy_amt=0))
+
     db.session.add_all(participants)
     db.session.commit()
 
@@ -86,8 +96,39 @@ def get_users():
         return jsonify(users_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
+    
+# Route for getting all tournaments and a list of their participants (tournaments page)
+@app.route('/api/flask/tournaments', methods=['GET'])
+def get_tournaments_and_participants():
+    try:
+        tournaments = Tournament.query.order_by(desc(Tournament.start_time)).all()
+        tournaments_data = []
+        for tournament in tournaments:
+            participants_data = []
+            participants = Participant.query.filter_by(tournament_id=tournament.id).all()
+            for participant in participants:
+                user = User.query.filter_by(discord_id=participant.discord_id).first()
+                participants_data.append({
+                    'id': participant.id,
+                    'username': user.discord_name,
+                    'bankroll': user.bankroll,
+                    'avatar_url': user.avatar_url,
+                    'rebuy_amt': participant.rebuy_amt
+                })
+            
+            tournaments_data.append({
+                'id': tournament.id,
+                'stake': tournament.stake,
+                'payout': tournament.payout,
+                'start_time' : tournament.start_time,
+                'participants': participants_data,
+            })
+                
+        return jsonify(tournaments_data), 200
+    except Exception as e:
+        return make_response(jsonify({'message': 'error getting tournaments', 'error': str(e)}), 500)
 
-# Home route API call for recent tournmanet podium
+# Home route API call for recent tournament podium
 @app.route('/api/flask/most_recent_tournament_with_users', methods=['GET'])
 def get_most_recent_tournament_with_users():
     try:

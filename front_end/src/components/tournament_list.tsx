@@ -52,45 +52,45 @@ export default async function TournamentList() {
     return (
         <div className="flex flex-row gap-8 flex-wrap justify-evenly">
             {tournament_list.map((tournament: TournamentInfo) => (
-                <div key={tournament.id} className="flex md:flex-row flex-col bg-zinc-900 rounded-md w-4/5 p-8 gap-16 justify-evenly">
-                    <Image
-                        src={Table}
-                        quality={100}
-                        alt={"Stack Poker Logo"}
-                        className="self-center flex"
-                        width={300}
-                        height={300}
-                        style={{ objectFit: "contain" }}
-                        priority
-                    />
-                    <div className="flex flex-col gap-8 items-center">
-                        <div className="flex flex-col gap-2">
-                         <h1 className="md:text-4xl text-xl">Tournament Start</h1>
-                         <h1 className="md:text-2xl text-lg self-center">{convertToSimpleTime(tournament.start_time)}</h1>
+                <div key={tournament.id} className="flex md:flex-row flex-col bg-zinc-900 rounded-md w-4/5 p-8 gap-8 justify-evenly">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-4">
+                            <h1 className="md:text-3xl text-2xl flex self-center font-bold">Participants</h1>
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <h1 className="md:text-4xl text-xl">Tournament Stake</h1>
-                            <h1 className="md:text-2xl text-lg self-center">${tournament.stake}</h1>         
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <h1 className="md:text-4xl text-xl">Tournament Payout</h1>
-                            <h1 className="md:text-2xl text-lg self-center">${tournament.payout}</h1>         
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <h1 className="md:text-4xl text-xl">Tournament Payout</h1>
-                            <h1 className="md:text-2xl text-lg self-center">${tournament.payout}</h1>         
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <h1 className="md:text-4xl text-2xl flex gap-4 self-center">Participants</h1>
-                            <div className="flex self-center flex-wrap">
+                        <Image
+                            src={Table}
+                            quality={100}
+                            alt={"Stack Poker Logo"}
+                            className="self-center flex"
+                            width={300}
+                            height={300}
+                            style={{ objectFit: "contain" }}
+                            priority
+                        />
+                        <div className="flex flex-row self-center flex-wrap justify-evenly gap-2">
                             {tournament.participants.map((participant: ParticipantsInfo) => (
-                                <div key={participant.id} className="flex flex-wrap text-md w-1/5">
+                                <div key={participant.id} className="flex flex-wrap text-md justify-center">
                                     <span className="flex items-end">@{participant.username}</span>
                                 </div>
                             ))}
-                            </div>
                         </div>
-                        
+
+                    </div>
+                    <div className="flex flex-col gap-4 items-center justify-evenly">
+                        <div className="flex flex-row gap-2">
+                            <h1 className="md:text-3xl text-xl font-bold">When:</h1>
+                            <h1 className="md:text-2xl text-lg self-end">{convertToSimpleTime(tournament.start_time)}</h1>
+                        </div>
+                        <div className="flex flex-row gap-2">
+                            <h1 className="md:text-3xl text-xl font-bold">Stake:</h1>
+                            <h1 className="md:text-2xl text-lg self-end">${tournament.stake}</h1>
+                        </div>
+                        <div className="flex flex-row gap-2">
+                            <h1 className="md:text-3xl text-xl font-bold">Payout:</h1>
+                            <h1 className="md:text-2xl text-lg self-end">${tournament.payout}</h1>
+                        </div>
+
+
                     </div>
                 </div>
             ))}

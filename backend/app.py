@@ -121,6 +121,7 @@ def get_tournaments_and_participants():
                 'stake': tournament.stake,
                 'payout': tournament.payout,
                 'start_time' : tournament.start_time,
+                'winner': tournament.first,
                 'participants': participants_data,
             })
                 

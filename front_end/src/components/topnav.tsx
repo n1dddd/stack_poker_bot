@@ -65,8 +65,7 @@ export function TopNav() {
                             height={1080}
                             style={{ objectFit: "contain" }}
                             priority
-                        >
-                        </Image>
+                        />
                     </Link>
                 </div>
                 <div className="lg:col-span-7 col-span-12 items-center justify-between content-center px-8">

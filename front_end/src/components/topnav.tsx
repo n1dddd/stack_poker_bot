@@ -33,19 +33,11 @@ const assetList = [
     },
     {
         id: 3,
-        suit: Spade,
-        option: "Ranks",
-        path: "/ranks",
-        alt: "Spade Suit Menu Icon",
-    },
-    {
-        id: 4,
         suit: Diamond,
         option: "About",
         path: "/about",
         alt: "Diamond Suit Menu Icon",
     }
-
 ]
 export function TopNav() {
     const pathname = usePathname();

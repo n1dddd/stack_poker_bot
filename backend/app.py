@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from datetime import datetime
 from os import environ
 app = Flask(__name__)
@@ -31,6 +31,7 @@ class Tournament(db.Model):
     third = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
     ongoing = db.Column(db.Boolean, nullable=False, default="True")
     start_time = db.Column(db.DateTime, default=datetime.now)
+    # Add an end time
 
     def json(self):
         return{'id': self.id, 'stake': self.stake, 'payout': self.payout, 'first': self.first, 'second': self.second, 'third': self.third}
@@ -92,7 +93,26 @@ with app.app_context():
 def get_users():
     try:
         users = User.query.all()
-        users_data = [{'id': user.discord_id, 'username': user.discord_name, 'bankroll': user.bankroll, 'avatar_url': user.avatar_url} for user in users]
+        users_data = []
+        for user in users:
+            # Get the count of tournaments participated by the user
+            tournaments_entered = db.session.query(func.count(Participant.id)).filter(Participant.discord_id == user.discord_id).scalar()
+            
+            # Get the tournaments won by the user (first place only)
+            tournaments_won = Tournament.query.filter(Tournament.first == user.discord_id).all()
+            
+            # Create a list of won tournaments
+            won_tournaments_data = [{'id': tournament.id, 'stake': tournament.stake, 'payout': tournament.payout} for tournament in tournaments_won]
+
+            user_data = {
+                'id': user.discord_id,
+                'username': user.discord_name,
+                'bankroll': user.bankroll,
+                'avatar_url': user.avatar_url,
+                'tournaments_entered': tournaments_entered,
+                'tournaments_won': won_tournaments_data
+            }
+            users_data.append(user_data)
         return jsonify(users_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting users', 'error': str(e)}), 500)
@@ -101,12 +121,19 @@ def get_users():
 @app.route('/api/flask/tournaments', methods=['GET'])
 def get_tournaments_and_participants():
     try:
+        # Query tournaments table, order descending by start time
         tournaments = Tournament.query.order_by(desc(Tournament.start_time)).all()
+        # Create a empty array in order to populate with the tournament data and participant data
         tournaments_data = []
+        # Loop through tournaments, append data to tournaments_data array
         for tournament in tournaments:
+            # Same idea as tournaments_data -- populate with participant data
             participants_data = []
+            # Query participants, filter by tournament_id in current loop to match participants
             participants = Participant.query.filter_by(tournament_id=tournament.id).all()
+            # Loop through participants, create object and append to participants array
             for participant in participants:
+                # Query the user table for avatar_url, most information is provided in participant, but might as well go directly to the user data
                 user = User.query.filter_by(discord_id=participant.discord_id).first()
                 participants_data.append({
                     'id': participant.id,
@@ -124,7 +151,7 @@ def get_tournaments_and_participants():
                 'winner': tournament.first,
                 'participants': participants_data,
             })
-                
+        # Return tournaments_data array, with each tournament instance carrying a participants object        
         return jsonify(tournaments_data), 200
     except Exception as e:
         return make_response(jsonify({'message': 'error getting tournaments', 'error': str(e)}), 500)
@@ -143,6 +170,7 @@ def get_most_recent_tournament_with_users():
             second_user = User.query.filter_by(discord_id=most_recent_tournament.second).first()
             third_user = User.query.filter_by(discord_id=most_recent_tournament.third).first()
             
+            # Organize the tournament data for the front end
             tournament_data = {
                 'id': most_recent_tournament.id,
                 'stake': most_recent_tournament.stake,
@@ -173,55 +201,3 @@ def get_most_recent_tournament_with_users():
             return jsonify({'message': 'No tournament entries found'}), 404
     except Exception as e:
         return make_response(jsonify({'message': 'Error getting most recent tournament with users', 'error': str(e)}), 500)
-
-# Test route
-@app.route('/api/flask/test', methods=['GET'])
-def test():
-    return jsonify({'message': 'the server is running'})
-      
-
-# Test route
-app.route('/api/flask/users/<id>', methods=['GET'])
-def get_user(id):
-    try:
-        user = User.query.filter_by(id=id).first()
-        if user:
-            return make_response(jsonify({'user': user.json()}), 200)
-        return make_response(jsonify({'message':'user not found'}), 404)
-    except Exception as e:
-        return make_response(jsonify({'message':'error getting user', 'error': str(e)}), 500)
-
-
-
-# @app.route('/api/flask/users', methods=['POST'])
-# def create_user():
-#     try:
-#         data = request.get_json()
-#         new_user = User(username=data['username'])
-#         db.session.add(new_user)
-#         db.session.commit()
-
-#         return jsonify({
-#             'id': new_user.id,
-#             'username': new_user.username,
-#             'bankroll': new_user.bankroll
-#         }), 201
-    
-#     except Exception as e:
-#         return make_response(jsonify({'message':'error creating user', 'error': str(e)}), 500)
-
-
-# app.route('/api/flask/users/<id>', methods=['PUT'])
-# def update_user_bankroll(id, operation, value):
-#     try:
-#         user = User.query.filter_by(id=id).first()
-#         if user:
-#             data = request.get_json()
-#             if operation == "add":
-#                 user.bankroll = user.bankroll + value
-#             elif operation == "subtract":
-#                 user.bankroll = user.bankroll - value
-#             return make_response(jsonify({'message':'user updated'}), 200)
-#         return make_response(jsonify({'message':'user not found', 'error': str(e)}), 404)
-#     except Exception as e:
-#         return make_response(jsonify({'message':'error getting user', 'error': str(e)}), 500)

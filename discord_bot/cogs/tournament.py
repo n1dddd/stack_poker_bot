@@ -206,43 +206,33 @@ class Tournaments(commands.Cog):
             scrubbed_first_place_id = [int(char) for char in first if char.isdigit()]
             scrubbed_second_place_id = [int(char) for char in second if char.isdigit()]
             scrubbed_third_place_id = [int(char) for char in third if char.isdigit()]
-            scrubbed_fourth_place_id = [int(char) for char in fourth if char.isdigit()]
-            scrubbed_fifth_place_id = [int(char) for char in fifth if char.isdigit()]
-            scrubbed_sixth_place_id = [int(char) for char in sixth if char.isdigit()]
             joined_first_place_id = int(''.join(str(num) for num in scrubbed_first_place_id))
             joined_second_place_id = int(''.join(str(num) for num in scrubbed_second_place_id))
             joined_third_place_id = int(''.join(str(num) for num in scrubbed_third_place_id))
-            joined_fourth_place_id = int(''.join(str(num) for num in scrubbed_fourth_place_id))
-            joined_fifth_place_id = int(''.join(str(num) for num in scrubbed_fifth_place_id))
-            joined_sixth_place_id = int(''.join(str(num) for num in scrubbed_sixth_place_id))
 
 
-            logger.info(f"{joined_first_place_id}")
-            logger.info(f"{joined_second_place_id}")
-            logger.info(f"{joined_third_place_id}")
-            logger.info(f"{joined_fourth_place_id}")
-            logger.info(f"{joined_fifth_place_id}")
-            logger.info(f"{joined_sixth_place_id}")
+            logger.info(f"{joined_first_place_id}, {joined_second_place_id}, {joined_third_place_id}")
 
 
-            # await self.db_conn.execute(
-            # 'UPDATE tournaments SET first = $1, second = $2, third = $3, ongoing = $4 WHERE id = $5', joined_first_place_id, joined_second_place_id,  joined_third_place_id, False, tournament_information['id']
-            # )
-            # if deal == True:
-            #     first_place_payout = int(get_tournament_information["payout"] * 0.65)
-            #     second_place_payout = int(get_tournament_information["payout"] * 0.35)
-            #     await self.db_conn.execute(
-            #         'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', first_place_payout, joined_first_place_id
-            #     )
-            #     await self.db_conn.execute(
-            #         'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', second_place_payout, joined_second_place_id
-            #     )
 
-            # elif deal == False:
-            #     first_place_payout = int(get_tournament_information["payout"])
-            #     await self.db_conn.execute(
-            #         'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', first_place_payout, joined_first_place_id
-            #     )
+            await self.db_conn.execute(
+            'UPDATE tournaments SET first = $1, second = $2, third = $3, ongoing = $4 WHERE id = $5', joined_first_place_id, joined_second_place_id,  joined_third_place_id, False, tournament_information['id']
+            )
+            if deal == True:
+                first_place_payout = int(get_tournament_information["payout"] * 0.65)
+                second_place_payout = int(get_tournament_information["payout"] * 0.35)
+                await self.db_conn.execute(
+                    'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', first_place_payout, joined_first_place_id
+                )
+                await self.db_conn.execute(
+                    'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', second_place_payout, joined_second_place_id
+                )
+
+            elif deal == False:
+                first_place_payout = int(get_tournament_information["payout"])
+                await self.db_conn.execute(
+                    'UPDATE users SET bankroll = bankroll + $1 WHERE discord_id = $2', first_place_payout, joined_first_place_id
+                )
             
             
             embed = discord.Embed(

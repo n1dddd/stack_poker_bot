@@ -30,11 +30,11 @@ class Tournament(db.Model):
     second = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
     third = db.Column(db.BigInteger, db.ForeignKey('users.discord_id'), nullable=True)
     ongoing = db.Column(db.Boolean, nullable=False, default="True")
-    start_time = db.Column(db.DateTime, default=datetime.now)
-    # Add an end time
+    start_time = db.Column(db.DateTime, nullable=True)
+    end_time = db.Column(db.DateTime, nullable=True)
 
     def json(self):
-        return{'id': self.id, 'stake': self.stake, 'payout': self.payout, 'first': self.first, 'second': self.second, 'third': self.third}
+        return{'id': self.id, 'stake': self.stake, 'payout': self.payout, 'first': self.first, 'second': self.second, 'third': self.third, 'ongoing': self.ongoing, 'start_time': self.start_time, 'end_time': self.end_time}
 
 class Participant(db.Model):
     __tablename__ = 'participants'
@@ -65,28 +65,28 @@ with app.app_context():
     db.session.add_all(users)
     db.session.commit()
 
-    tournaments.append(Tournament(stake=20, payout=300, first=799796051157975090, second=150297317658984448, third=572499409661853698, ongoing=False))
-    tournaments.append(Tournament(stake=10, payout=100, first=89918396170268672, second=150297317658984448, third=84205293101154304, ongoing=False))
+    # tournaments.append(Tournament(stake=20, payout=300, first=799796051157975090, second=150297317658984448, third=572499409661853698, ongoing=False))
+    # tournaments.append(Tournament(stake=10, payout=100, first=89918396170268672, second=150297317658984448, third=84205293101154304, ongoing=False))
 
-    db.session.add_all(tournaments)
-    db.session.commit()
+    # db.session.add_all(tournaments)
+    # db.session.commit()
     
-    participants.append(Participant(discord_id=84205293101154304, discord_name='stef_.', tournament_id=1, rebuy_amt=0))
-    participants.append(Participant(discord_id=89918396170268672, discord_name='n1d', tournament_id=1, rebuy_amt=1))
-    participants.append(Participant(discord_id=189043397489721345, discord_name='aven5187', tournament_id=1, rebuy_amt=0))
-    participants.append(Participant(discord_id=150297317658984448, discord_name='denya9', tournament_id=1, rebuy_amt=2))
-    participants.append(Participant(discord_id=799796051157975090, discord_name='dnd.gaw', tournament_id=1, rebuy_amt=5))
-    participants.append(Participant(discord_id=572499409661853698, discord_name='babushka_frosia', tournament_id=1, rebuy_amt=1))
+    # participants.append(Participant(discord_id=84205293101154304, discord_name='stef_.', tournament_id=1, rebuy_amt=0))
+    # participants.append(Participant(discord_id=89918396170268672, discord_name='n1d', tournament_id=1, rebuy_amt=1))
+    # participants.append(Participant(discord_id=189043397489721345, discord_name='aven5187', tournament_id=1, rebuy_amt=0))
+    # participants.append(Participant(discord_id=150297317658984448, discord_name='denya9', tournament_id=1, rebuy_amt=2))
+    # participants.append(Participant(discord_id=799796051157975090, discord_name='dnd.gaw', tournament_id=1, rebuy_amt=5))
+    # participants.append(Participant(discord_id=572499409661853698, discord_name='babushka_frosia', tournament_id=1, rebuy_amt=1))
 
-    participants.append(Participant(discord_id=84205293101154304, discord_name='stef_.', tournament_id=2, rebuy_amt=0))
-    participants.append(Participant(discord_id=89918396170268672, discord_name='n1d', tournament_id=2, rebuy_amt=1))
-    participants.append(Participant(discord_id=189043397489721345, discord_name='aven5187', tournament_id=2, rebuy_amt=0))
-    participants.append(Participant(discord_id=150297317658984448, discord_name='denya9', tournament_id=2, rebuy_amt=2))
-    participants.append(Participant(discord_id=799796051157975090, discord_name='dnd.gaw', tournament_id=2, rebuy_amt=1))
-    participants.append(Participant(discord_id=572499409661853698, discord_name='babushka_frosia', tournament_id=2, rebuy_amt=0))
+    # participants.append(Participant(discord_id=84205293101154304, discord_name='stef_.', tournament_id=2, rebuy_amt=0))
+    # participants.append(Participant(discord_id=89918396170268672, discord_name='n1d', tournament_id=2, rebuy_amt=1))
+    # participants.append(Participant(discord_id=189043397489721345, discord_name='aven5187', tournament_id=2, rebuy_amt=0))
+    # participants.append(Participant(discord_id=150297317658984448, discord_name='denya9', tournament_id=2, rebuy_amt=2))
+    # participants.append(Participant(discord_id=799796051157975090, discord_name='dnd.gaw', tournament_id=2, rebuy_amt=1))
+    # participants.append(Participant(discord_id=572499409661853698, discord_name='babushka_frosia', tournament_id=2, rebuy_amt=0))
 
-    db.session.add_all(participants)
-    db.session.commit()
+    # db.session.add_all(participants)
+    # db.session.commit()
 
 # Route for getting user information (Members Page)
 @app.route('/api/flask/users', methods=['GET'])
@@ -148,6 +148,7 @@ def get_tournaments_and_participants():
                 'stake': tournament.stake,
                 'payout': tournament.payout,
                 'start_time' : tournament.start_time,
+                'end_time' : tournament.end_time,
                 'winner': tournament.first,
                 'participants': participants_data,
             })

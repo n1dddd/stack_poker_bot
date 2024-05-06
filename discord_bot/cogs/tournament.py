@@ -4,7 +4,7 @@ import asyncpg
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 from os import environ
 
@@ -153,7 +153,7 @@ class Tournaments(commands.Cog):
         elif is_ongoing_game is None:
             timeout_seconds = (add_minutes + late_reg_minutes) * 60
             view = Confirm(timeout=timeout_seconds)
-            start_time = datetime.now(ZoneInfo("Canada/Eastern")) + timedelta(minutes=add_minutes)
+            start_time = datetime.now() + timedelta(minutes=add_minutes)
 
             formatted_start_time = '{:%I:%M %p}'.format(start_time)
 
@@ -162,8 +162,8 @@ class Tournaments(commands.Cog):
             formatted_end_time = '{:%I:%M %p}'.format(end_time)
 
             await self.db_conn.execute(
-                'INSERT INTO tournaments(stake, payout, ongoing) VALUES ($1, $2, $3)',
-                stake, 0, True
+                'INSERT INTO tournaments(stake, payout, ongoing, start_time) VALUES ($1, $2, $3, $4)',
+                stake, 0, True, start_time
             )
 
             embed = discord.Embed(
@@ -186,7 +186,7 @@ class Tournaments(commands.Cog):
             description="End a poker tournament....example /tournament end 1stplacename 2ndplacename 3rdplacename split"
     )
     @app_commands.guilds(discord.Object(id=guild))
-    async def end(self, context: Context, first : str, second : str, third : str, fourth: str, fifth: str, sixth: str, deal : bool):
+    async def end(self, context: Context, first : str, second : str, third : str,  deal : bool):
         
         await self.create_db_connect()
         get_tournament_information = await self.db_conn.fetchrow(
@@ -212,11 +212,10 @@ class Tournaments(commands.Cog):
 
 
             logger.info(f"{joined_first_place_id}, {joined_second_place_id}, {joined_third_place_id}")
-
-
+            end_time = datetime.now()
 
             await self.db_conn.execute(
-            'UPDATE tournaments SET first = $1, second = $2, third = $3, ongoing = $4 WHERE id = $5', joined_first_place_id, joined_second_place_id,  joined_third_place_id, False, tournament_information['id']
+            'UPDATE tournaments SET first = $1, second = $2, third = $3, ongoing = $4, end_time = $5 WHERE id = $6', joined_first_place_id, joined_second_place_id,  joined_third_place_id, False, end_time, tournament_information['id']
             )
             if deal == True:
                 first_place_payout = int(get_tournament_information["payout"] * 0.65)

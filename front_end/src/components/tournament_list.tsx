@@ -16,6 +16,7 @@ interface TournamentInfo {
     payout: number,
     start_time: any,
     participants: ParticipantsInfo,
+    end_time: any,
 }
 interface MemberInfo {
     avatar_url: string,
@@ -27,13 +28,19 @@ interface MemberInfo {
 
 
 async function getTournaments() {
-    const response = await fetch('http://localhost:4000/api/flask/tournaments', { cache: "no-store" })
-        .then(res => { return res.json() })
-    return response;
+    try {
+        const response = await fetch('http://localhost:4000/api/flask/tournaments', { cache: "no-store" })
+        const data = await response.json();
+        return data
+    } catch (error) {
+        console.error("Error fetching tournaments", error);
+        return null;
+    }
 }
 
 export default async function TournamentList() {
     const tournament_list = await getTournaments();
+
 
     return (
         <div className="flex flex-row gap-8 flex-wrap justify-evenly">

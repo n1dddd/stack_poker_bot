@@ -64,7 +64,7 @@ export default async function Podium() {
             <div className="px-8 w-full flex-col self-center justify-self-center py-2 rounded-md bg-zinc-900 rounded-md">
                 <div className="flex flex-col gap-4">
                     <h1 className="flex text-6xl text-stroke font-bold text-center">Recent Tournament Result</h1>
-                    <h1 className="flex text-3xl text-stroke font-bold ">When: {convertToSimpleTime(most_recent_tournament.start_time)}</h1>
+                    <h1 className="flex text-3xl text-stroke font-bold ">When: {convertToSimpleTime(most_recent_tournament.end_time)}</h1>
                     <h1 className="flex text-3xl text-stroke font-bold">Stake: ${most_recent_tournament.stake}</h1>
                 </div>
                 <div className="flex lg:flex-row flex-col justify-between pt-14">

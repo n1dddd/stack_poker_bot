@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 import { TopNav } from "../components/topnav"
 
 import { Arimo } from "next/font/google";
+import Footer from "~/components/footer";
 
 const arimo = Arimo({
   subsets: ["latin"],
@@ -22,9 +23,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${arimo.variable} dark flex flex-col`}>
-          <TopNav/>
-          {children}
+          <TopNav />
+          <div className="2xl:w-3/4 xl:px-0 px-4 w-full flex-row self-center justify-between py-8">
+            {children}
+            <footer>
+              <Footer />
+            </footer>
+          </div>
       </body>
-    </html>
+      
+    </html >
   );
 }

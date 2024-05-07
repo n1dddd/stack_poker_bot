@@ -176,6 +176,9 @@ def get_most_recent_tournament_with_users():
                 'id': most_recent_tournament.id,
                 'stake': most_recent_tournament.stake,
                 'payout': most_recent_tournament.payout,
+                'ongoing': most_recent_tournament.ongoing,
+                'start_time': most_recent_tournament.start_time,
+                'end_time': most_recent_tournament.end_time,
                 'first': {
                     'discord_id': first_user.discord_id,
                     'discord_name': first_user.discord_name,
@@ -194,8 +197,6 @@ def get_most_recent_tournament_with_users():
                     'bankroll': third_user.bankroll,
                     'avatar_url': third_user.avatar_url
                 } if third_user else None,
-                'ongoing': most_recent_tournament.ongoing,
-                'start_time': most_recent_tournament.start_time.strftime("%Y-%m-%d %H:%M:%S")
             }
             return jsonify(tournament_data), 200
         else:

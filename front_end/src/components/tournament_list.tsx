@@ -69,8 +69,8 @@ export default async function TournamentList() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-4 items-center justify-evenly">
-                        <div className="flex flex-row gap-2">
-                            <h1 className="md:text-3xl text-xl font-bold">When:</h1>
+                        <div className="flex flex-row gap-2 lg:flex-row flex-col">
+                            <h1 className="md:text-3xl text-xl text-center font-bold">Finished:</h1>
                             <h1 className="md:text-2xl text-lg self-end">{convertToSimpleTime(tournament.start_time)}</h1>
                         </div>
                         <div className="flex flex-row gap-2">

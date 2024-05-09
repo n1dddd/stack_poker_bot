@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <div className="xl:px-0 px-4 flex flex-col w-full self-center py-8">
+    <div className="xl:px-0 px-4 flex flex-col w-full self-center pt-24">
         <div className="border-t-2 border-white flex flex-row justify-evenly pt-8">
           <Link href={"/members"}>
             <h1 className="flex text-xl text-stroke font-bold text-center">Members</h1>

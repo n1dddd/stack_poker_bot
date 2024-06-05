@@ -56,9 +56,16 @@ That beautiful off-white and those darker gray shadowed elements, combined with 
   <img src="https://i.imgur.com/EYm5fGw.png" alt="Figma Mockup">
 </p>
 
-## Current Progress
+### Discord Bot Commands
 
-I have successfully called the Flask API from the frontend locally. The next steps include constructing a display UI for recent tournament results, as outlined in the Figma mockup. Most MVP bot functions are completed, and the project is progressing smoothly.
+#### Join Poker Database
+![Join Poker Database Command](./front_end/public/Stack_Poker_Bot_Command_Join_PKDB.gif)
+
+#### Join Tournament
+![Join Tournament Command](./front_end/public/Stack_Poker_Bot_Command_Join_Tourney.gif)
+
+#### End Tournament
+![End Tournament Command](./front_end/public/Stack_Poker_Bot_Command_End_Tourney.gif)
 
 ## Demos and Visuals
 

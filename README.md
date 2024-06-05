@@ -51,13 +51,13 @@ I have successfully called the Flask API from the frontend locally. The next ste
 ## Demos and Visuals
 
 ### Home Page
-![Stack Poker Home Page](./Stack_Poker_Home_Page.gif)
+![Stack Poker Home Page](./front_end/public/Stack_Poker_Home_Page.gif)
 
 ### Members Overview
-![Stack Poker Members](./Stack_Poker_Members.gif)
+![Stack Poker Members](./front_end/public/Stack_Poker_Members.gif)
 
 ### Tournaments Section
-![Stack Poker Tournaments](./Stack_Poker_Tournaments.gif)
+![Stack Poker Tournaments](./front_end/public/Stack_Poker_Tournaments.gif)
 
 ## Assets at Play
 

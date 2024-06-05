@@ -1,36 +1,79 @@
-## Stack Poker Bot | Club
+# Stack Poker Bot | Club
 
-A discord community I am part of hosts poker nights for play chips,
-and we all recently really got into the sport side of the game. It is 
-a game of deception, chasing the odds, and playing your best hand (or face). We ran into the issue early on in keeping a fictional book, and I
-figured there had to be a better way. In the end, I settled on a Next.js frontend, a python microservice discord bot, and a Flask API to persist data for all user access points**(user data, tournaments, tournament results, tournament participants)
+Welcome to the **Stack Poker Bot** project! This bot is designed for a Discord community that hosts poker nights using play chips. We have a passionate group who loves the strategic and deceptive aspects of poker, and we wanted a better way to manage our games and results. Hence, the Stack Poker Bot was born.
 
-**Front end for displaying data and the server for actions
+## Project Overview
 
-I went away at programming a discord bot, and breathed life into it as I 
-connected my Flask Postgres powered backend to it. I quickly ran into another issue. What in the hell am I gonna do for assets? This community I am part of is tight knit in a sense, I have known some of them for 20 years, some for less than a year. Lively mix. Anyways, we all at some time played a video game together that had a certain asset that created a certain type of dopamine. The asset can be seen below
+The Stack Poker Bot leverages a Next.js frontend, a Python microservice Discord bot, and a Flask API to persist data for various user access points, including user data, tournaments, tournament results, and participants.
 
+## Features
 
-<img src="https://www.realmeye.com/forum/uploads/default/original/3X/2/0/201d3156c26a462be5405f3d3379833c45411874.png" width="200" height="200">
-<!-- !["White Bag From Realm of the Mad God"]( | width = 100) -->
+- **Frontend**: Built with Next.js to display data and manage user interactions.
+- **Backend**: Python microservice and Flask API connected to a Postgres database to handle data persistence and bot functionality.
+- **Discord Integration**: Seamless interaction within our Discord community for managing poker nights and tracking results.
 
-That beautiful off-white and those darker gray shadowed elements. Lets not forget that elegant choice of blue(s). When this "bag" dropped from an enemy, it contained some of the most coveted equipment in the game. So I decided on this colour pallete to create the front end.
+## Stack Information
 
-## Where I am so Far
+Here's an overview of the technology stack used in the Stack Poker Bot project:
 
-I am continuing development, I have successfully called to the Flask API in the front end locally. Next steps would be to construct a display UI for recent tournament results (like in the figma mockup), since most of the MVP bot functions are completed.
+### Frontend
 
-### Assets at Play
+- **Next.js**: A React framework for server-rendered applications.
+- **JavaScript**: For interactive UI elements and API calls.
+- **HTML/CSS**: For structuring and styling the web pages.
 
-#### Here is the bot logo:
-<img src="./front_end/public/Bot.png" width="200" height="200">
+### Backend
 
-#### Figma Mockup
+- **Python**
+- **Flask**
+- **PostgreSQL**
 
-!["Figma Mockup"](https://i.imgur.com/EYm5fGw.png)
+### Discord Bot
 
-#### Front-End Demo
+- **Discord.py**: A Python wrapper for the Discord API, used to create the bot and manage its interactions within the Discord server.
 
-!["Responsive Front End"](./front_end/public/Stack_Poker_FE_Update_Resp.gif)
+## Development Journey
 
+Starting with the bot, I connected it to my Flask-Postgres powered backend, quickly realizing the need for assets. Our community has a history of playing a game that evoked nostalgia, leading to the choice of a specific color palette for the frontend.
 
+### Asset Inspiration
+
+<p align="center">
+  <img src="https://www.realmeye.com/forum/uploads/default/original/3X/2/0/201d3156c26a462be5405f3d3379833c45411874.png" width="200" height="200" alt="White Bag from Realm of the Mad God">
+</p>
+
+That beautiful off-white and those darker gray shadowed elements, combined with elegant blue shades, inspired the frontend design. When this "bag" dropped in the game, it contained some of the most coveted equipment, making it the perfect fit for our project.
+
+## Current Progress
+
+I have successfully called the Flask API from the frontend locally. The next steps include constructing a display UI for recent tournament results, as outlined in the Figma mockup. Most MVP bot functions are completed, and the project is progressing smoothly.
+
+## Demos and Visuals
+
+### Home Page
+![Stack Poker Home Page](./Stack_Poker_Home_Page.gif)
+
+### Members Overview
+![Stack Poker Members](./Stack_Poker_Members.gif)
+
+### Tournaments Section
+![Stack Poker Tournaments](./Stack_Poker_Tournaments.gif)
+
+## Assets at Play
+
+### Bot Logo
+<p align="center">
+  <img src="./front_end/public/Bot.png" width="200" height="200" alt="Bot Logo">
+</p>
+
+### Figma Mockup
+<p align="center">
+  <img src="https://i.imgur.com/EYm5fGw.png" alt="Figma Mockup">
+</p>
+
+## Future Plans
+
+- **UI Enhancements**: Continue developing the UI for displaying tournament results.
+- **Additional Features**: Explore adding new features to enhance the poker night experience.
+
+Thank you for checking out the Stack Poker Bot project. Contributions and feedback are always welcome!

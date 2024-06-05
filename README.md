@@ -44,6 +44,18 @@ Starting with the bot, I connected it to my Flask-Postgres powered backend, quic
 
 That beautiful off-white and those darker gray shadowed elements, combined with elegant blue shades, inspired the frontend design. When this "bag" dropped in the game, it contained some of the most coveted equipment, making it the perfect fit for our project.
 
+## Assets at Play
+
+### Bot Logo
+<p align="center">
+  <img src="./front_end/public/Bot.png" width="200" height="200" alt="Bot Logo">
+</p>
+
+### Figma Mockup
+<p align="center">
+  <img src="https://i.imgur.com/EYm5fGw.png" alt="Figma Mockup">
+</p>
+
 ## Current Progress
 
 I have successfully called the Flask API from the frontend locally. The next steps include constructing a display UI for recent tournament results, as outlined in the Figma mockup. Most MVP bot functions are completed, and the project is progressing smoothly.
@@ -59,17 +71,6 @@ I have successfully called the Flask API from the frontend locally. The next ste
 ### Tournaments Section
 ![Stack Poker Tournaments](./front_end/public/Stack_Poker_Tournaments.gif)
 
-## Assets at Play
-
-### Bot Logo
-<p align="center">
-  <img src="./front_end/public/Bot.png" width="200" height="200" alt="Bot Logo">
-</p>
-
-### Figma Mockup
-<p align="center">
-  <img src="https://i.imgur.com/EYm5fGw.png" alt="Figma Mockup">
-</p>
 
 ## Future Plans
 

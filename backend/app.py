@@ -57,11 +57,11 @@ with app.app_context():
     participants = []
 
     users.append(User(discord_id=84205293101154304, discord_name='stef_.'))
-    users.append(User(discord_id=89918396170268672, discord_name='n1d'))
+    # users.append(User(discord_id=89918396170268672, discord_name='n1d'))
     users.append(User(discord_id=189043397489721345, discord_name='aven5187'))
     users.append(User(discord_id=150297317658984448, discord_name='denya9'))
-    users.append(User(discord_id=799796051157975090, discord_name='dnd.gaw'))
-    users.append(User(discord_id=572499409661853698, discord_name='babushka_frosia'))
+    # users.append(User(discord_id=799796051157975090, discord_name='dnd.gaw'))
+    # users.append(User(discord_id=572499409661853698, discord_name='babushka_frosia'))
     db.session.add_all(users)
     db.session.commit()
 
@@ -69,7 +69,7 @@ with app.app_context():
     # tournaments.append(Tournament(stake=10, payout=100, first=89918396170268672, second=150297317658984448, third=84205293101154304, ongoing=False))
 
     # db.session.add_all(tournaments)
-    # db.session.commit()
+    # db.session.commit()s
     
     # participants.append(Participant(discord_id=84205293101154304, discord_name='stef_.', tournament_id=1, rebuy_amt=0))
     # participants.append(Participant(discord_id=89918396170268672, discord_name='n1d', tournament_id=1, rebuy_amt=1))
